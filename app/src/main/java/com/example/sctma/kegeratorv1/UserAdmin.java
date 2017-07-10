@@ -15,13 +15,13 @@ import java.util.ArrayList;
 
 public class UserAdmin extends AppCompatActivity {
 
-
+    ArrayList<LinearLayout> scrollViews;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_admin);
 
-        ArrayList<LinearLayout> scrollViews = new ArrayList<LinearLayout>();
+        scrollViews = new ArrayList<LinearLayout>();
         scrollViews.add((LinearLayout) findViewById(R.id.seniorLinearLayout));
         scrollViews.add((LinearLayout) findViewById(R.id.juniorLinearLayout));
         scrollViews.add((LinearLayout) findViewById(R.id.sophomoreLinearLayout));
@@ -51,6 +51,34 @@ public class UserAdmin extends AppCompatActivity {
             });
             scrollViews.get(in).addView(b);
 
+        }//search through hashtable
+    }
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        for(int i = 0; i < scrollViews.size();i++)
+            scrollViews.get(i).removeAllViews();
+
+        for(String key : MainActivity.userHashTable.keySet())
+        {
+            User user = MainActivity.userHashTable.get(key);
+            int in = getClassAsInt(user.getClassification());
+
+            Button b = new Button(this);
+            b.setText(user.getName());
+            b.setTag(key);
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //go to edit menu
+                    String key = (String)v.getTag();
+                    Intent intent = new Intent(getApplicationContext(), EditUserActivity.class);
+                    intent.putExtra("KEY", key);
+                    startActivity(intent);
+                }
+            });
+            scrollViews.get(in).addView(b);
         }//search through hashtable
     }
     private int getClassAsInt(String cl)
