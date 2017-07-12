@@ -32,7 +32,8 @@ public class AdminTop extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //keg on click listener
-
+                Intent intent = new Intent(getApplicationContext(), BeerAdmin.class);
+                startActivity(intent);
             }
         });
 

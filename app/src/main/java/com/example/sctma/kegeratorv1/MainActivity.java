@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     static Hashtable<String, User> userHashTable;
     static Hashtable<String, RFID> rfidHashTable;
     static Hashtable<String, Balance> balanceHashTable;
+    static KegInfo kegInfo[] = new KegInfo[2];
 
     DropboxAPI<AndroidAuthSession> mApi;
 
@@ -133,6 +135,74 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
+    ChildEventListener keg1Listener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            kegInfo[0] = new KegInfo((String)dataSnapshot.child("Name").getValue(),
+                    (String)dataSnapshot.child("Description").getValue(),
+                    (String)dataSnapshot.child("KegSize").getValue(),
+                    getDoubleFromDatabase(dataSnapshot.child("Total").getValue()),
+                    getDoubleFromDatabase(dataSnapshot.child("Spent").getValue()),
+                    getDoubleFromDatabase(dataSnapshot.child("Fee").getValue()),
+                    getDoubleFromDatabase(dataSnapshot.child("Saving").getValue()),
+                    (String)dataSnapshot.child("Purchaser").getValue());
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            if(kegInfo[0] == null)
+                return;
+            kegInfo[0].setName((String)dataSnapshot.child("Name").getValue());
+            kegInfo[0].setDescription((String)dataSnapshot.child("Description").getValue());
+            kegInfo[0].setKegSize((String)dataSnapshot.child("KegSize").getValue());
+            kegInfo[0].setTotalPrice(getDoubleFromDatabase(dataSnapshot.child("Total").getValue()));
+            kegInfo[0].setSpent(getDoubleFromDatabase(dataSnapshot.child("Spent").getValue()));
+            kegInfo[0].setFee(getDoubleFromDatabase(dataSnapshot.child("Fee").getValue()));
+            kegInfo[0].setSavings(getDoubleFromDatabase(dataSnapshot.child("Saving").getValue()));
+            kegInfo[0].setPurchaser((String)dataSnapshot.child("Purchaser").getValue());
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+    ChildEventListener keg2Listener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,6 +229,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //on click listener to keg 1 screen
+                Intent intent = new Intent(getApplicationContext(), PourActivity.class);
+                startActivity(intent);
             }
         });
         keg2.setOnClickListener(new View.OnClickListener(){
@@ -166,12 +238,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //on click listener to keg 2 screen
+                Intent intent = new Intent(getApplicationContext(), PourActivity.class);
+                startActivity(intent);
             }
         });
 
         ref = FirebaseDatabase.getInstance().getReference();
         ref.child("Users").addChildEventListener(userListener);
         ref.child("RFID").addChildEventListener(rfidListener);
+        //ref.child("Kegs").child("0").addChildEventListener();
+        //ref.child("Kegs").child("1").addChildEventListener()
 
 
     }

@@ -27,9 +27,15 @@
         <activity
             android:name=".UserAdmin"
             android:parentActivityName=".AdminTop" />
-        <activity android:name=".EditUserActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:parentActivityName=".UserAdmin"></activity>
+        <activity
+            android:name=".EditUserActivity"
+            android:parentActivityName=".UserAdmin"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".PourActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".BeerAdmin"
+            android:parentActivityName=".AdminTop"></activity>
     </application>
 
 </manifest>
