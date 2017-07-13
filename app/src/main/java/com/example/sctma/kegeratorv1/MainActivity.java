@@ -135,10 +135,11 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
-    ChildEventListener keg1Listener = new ChildEventListener() {
+    ChildEventListener kegListeners = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            kegInfo[0] = new KegInfo((String)dataSnapshot.child("Name").getValue(),
+            int i = Integer.parseInt(dataSnapshot.getKey().toString());
+            kegInfo[i] = new KegInfo((String)dataSnapshot.child("Name").getValue(),
                     (String)dataSnapshot.child("Description").getValue(),
                     (String)dataSnapshot.child("KegSize").getValue(),
                     getDoubleFromDatabase(dataSnapshot.child("Total").getValue()),
@@ -150,42 +151,17 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            if(kegInfo[0] == null)
+            int i = Integer.parseInt(dataSnapshot.getKey().toString());
+            if(kegInfo[i] == null)
                 return;
-            kegInfo[0].setName((String)dataSnapshot.child("Name").getValue());
-            kegInfo[0].setDescription((String)dataSnapshot.child("Description").getValue());
-            kegInfo[0].setKegSize((String)dataSnapshot.child("KegSize").getValue());
-            kegInfo[0].setTotalPrice(getDoubleFromDatabase(dataSnapshot.child("Total").getValue()));
-            kegInfo[0].setSpent(getDoubleFromDatabase(dataSnapshot.child("Spent").getValue()));
-            kegInfo[0].setFee(getDoubleFromDatabase(dataSnapshot.child("Fee").getValue()));
-            kegInfo[0].setSavings(getDoubleFromDatabase(dataSnapshot.child("Saving").getValue()));
-            kegInfo[0].setPurchaser((String)dataSnapshot.child("Purchaser").getValue());
-        }
-
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-        }
-
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
-    };
-    ChildEventListener keg2Listener = new ChildEventListener() {
-        @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-        }
-
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+            kegInfo[i].setName((String)dataSnapshot.child("Name").getValue());
+            kegInfo[i].setDescription((String)dataSnapshot.child("Description").getValue());
+            kegInfo[i].setKegSize((String)dataSnapshot.child("KegSize").getValue());
+            kegInfo[i].setTotalPrice(getDoubleFromDatabase(dataSnapshot.child("Total").getValue()));
+            kegInfo[i].setSpent(getDoubleFromDatabase(dataSnapshot.child("Spent").getValue()));
+            kegInfo[i].setFee(getDoubleFromDatabase(dataSnapshot.child("Fee").getValue()));
+            kegInfo[i].setSavings(getDoubleFromDatabase(dataSnapshot.child("Saving").getValue()));
+            kegInfo[i].setPurchaser((String)dataSnapshot.child("Purchaser").getValue());
         }
 
         @Override
@@ -246,8 +222,7 @@ public class MainActivity extends AppCompatActivity {
         ref = FirebaseDatabase.getInstance().getReference();
         ref.child("Users").addChildEventListener(userListener);
         ref.child("RFID").addChildEventListener(rfidListener);
-        //ref.child("Kegs").child("0").addChildEventListener();
-        //ref.child("Kegs").child("1").addChildEventListener()
+        ref.child("Kegs").addChildEventListener(kegListeners);
 
 
     }

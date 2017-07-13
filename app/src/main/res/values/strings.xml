@@ -11,4 +11,13 @@
         <item>Freshman</item>
         <item>Other</item>
     </string-array>
+    <string-array name="kegSize_array">
+        <item>Half</item>
+        <item>50 Liter</item>
+        <item>Quarter</item>
+        <item>Sixth</item>
+        <item>Cornelius</item>
+        <item>Mini</item>
+        <item>European</item>
+    </string-array>
 </resources>

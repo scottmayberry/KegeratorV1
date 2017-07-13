@@ -34,8 +34,11 @@
         <activity
             android:name=".PourActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".BeerAdmin"
-            android:parentActivityName=".AdminTop"></activity>
+        <activity
+            android:name=".BeerAdmin"
+            android:parentActivityName=".AdminTop" />
+        <activity android:name=".EditKegActivity"
+            android:windowSoftInputMode="stateHidden"></activity>
     </application>
 
 </manifest>
