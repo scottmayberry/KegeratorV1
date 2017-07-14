@@ -31,9 +31,9 @@ public class UserAdmin extends AppCompatActivity {
 
 
 
-        for(String key : MainActivity.userHashTable.keySet())
+        for(String key : Util.userHashTable.keySet())
         {
-            User user = MainActivity.userHashTable.get(key);
+            User user = Util.userHashTable.get(key);
             int in = getClassAsInt(user.getClassification());
 
             Button b = new Button(this);
@@ -60,9 +60,9 @@ public class UserAdmin extends AppCompatActivity {
         for(int i = 0; i < scrollViews.size();i++)
             scrollViews.get(i).removeAllViews();
 
-        for(String key : MainActivity.userHashTable.keySet())
+        for(String key : Util.userHashTable.keySet())
         {
-            User user = MainActivity.userHashTable.get(key);
+            User user = Util.userHashTable.get(key);
             int in = getClassAsInt(user.getClassification());
 
             Button b = new Button(this);

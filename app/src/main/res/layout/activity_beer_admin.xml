@@ -9,15 +9,16 @@
     <android.support.v7.widget.CardView
         android:id="@+id/keg1CardView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp"
         app:contentPadding="5dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/keg2CardView"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="48dp">
 
         <LinearLayout
             android:id="@+id/keg1Layout"
@@ -30,6 +31,16 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/keg2Layout"
             app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/inactive1Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.66"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Inactive"
+                android:textSize="36sp"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/keg1Image"
@@ -45,17 +56,17 @@
                 android:layout_weight="2" />
 
             <TextView
-                android:id="@+id/description1TitleText"
+                android:id="@+id/name1TitleText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="Description"
+                android:text="Name"
                 android:textStyle="bold"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="0dp" />
 
             <TextView
-                android:id="@+id/description1Text"
+                android:id="@+id/name1Text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
@@ -96,7 +107,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/beerLeft1Text"
+                android:id="@+id/beersLeft1Text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.66"
@@ -167,14 +178,16 @@
         android:id="@+id/keg2CardView"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginBottom="48dp"
+        android:layout_marginTop="48dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp"
         app:contentPadding="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/keg1CardView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/keg1CardView"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/keg1CardView"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:id="@+id/keg2Layout"
@@ -184,6 +197,16 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintVertical_bias="1.0"
             tools:layout_editor_absoluteY="0dp">
+
+            <TextView
+                android:id="@+id/inactive2Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.66"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Inactive"
+                android:textSize="36sp"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/keg2Image"
@@ -199,17 +222,17 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/description2TitleText"
+                android:id="@+id/name2TitleText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="Description"
+                android:text="Name"
                 android:textStyle="bold"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="0dp" />
 
             <TextView
-                android:id="@+id/description2Text"
+                android:id="@+id/name2Text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"

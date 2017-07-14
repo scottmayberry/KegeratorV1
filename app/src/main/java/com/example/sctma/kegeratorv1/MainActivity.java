@@ -25,13 +25,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Hashtable;
 
+import static com.example.sctma.kegeratorv1.Util.ADMIN_REQUEST;
+import static com.example.sctma.kegeratorv1.Util.balanceHashTable;
+import static com.example.sctma.kegeratorv1.Util.kegInfo;
+import static com.example.sctma.kegeratorv1.Util.mContext;
+import static com.example.sctma.kegeratorv1.Util.ref;
+import static com.example.sctma.kegeratorv1.Util.rfidHashTable;
+import static com.example.sctma.kegeratorv1.Util.userHashTable;
+
 public class MainActivity extends AppCompatActivity {
 
-    static DatabaseReference ref;
-    static Hashtable<String, User> userHashTable;
-    static Hashtable<String, RFID> rfidHashTable;
-    static Hashtable<String, Balance> balanceHashTable;
-    static KegInfo kegInfo[] = new KegInfo[2];
+
+
 
     DropboxAPI<AndroidAuthSession> mApi;
 
@@ -139,29 +144,35 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             int i = Integer.parseInt(dataSnapshot.getKey().toString());
+            if(i > 1)
+                return;
             kegInfo[i] = new KegInfo((String)dataSnapshot.child("Name").getValue(),
-                    (String)dataSnapshot.child("Description").getValue(),
                     (String)dataSnapshot.child("KegSize").getValue(),
-                    getDoubleFromDatabase(dataSnapshot.child("Total").getValue()),
+                    (String)dataSnapshot.child("Style").getValue(),
                     getDoubleFromDatabase(dataSnapshot.child("Spent").getValue()),
                     getDoubleFromDatabase(dataSnapshot.child("Fee").getValue()),
                     getDoubleFromDatabase(dataSnapshot.child("Saving").getValue()),
-                    (String)dataSnapshot.child("Purchaser").getValue());
+                    (String)dataSnapshot.child("Purchaser").getValue(),
+                    (boolean)dataSnapshot.child("active").getValue());
+            updateKegCardInfo(i);
         }
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             int i = Integer.parseInt(dataSnapshot.getKey().toString());
+            if(i > 1)
+                return;
             if(kegInfo[i] == null)
                 return;
             kegInfo[i].setName((String)dataSnapshot.child("Name").getValue());
-            kegInfo[i].setDescription((String)dataSnapshot.child("Description").getValue());
             kegInfo[i].setKegSize((String)dataSnapshot.child("KegSize").getValue());
-            kegInfo[i].setTotalPrice(getDoubleFromDatabase(dataSnapshot.child("Total").getValue()));
+            kegInfo[i].setStyle((String)dataSnapshot.child("Style").getValue());
             kegInfo[i].setSpent(getDoubleFromDatabase(dataSnapshot.child("Spent").getValue()));
             kegInfo[i].setFee(getDoubleFromDatabase(dataSnapshot.child("Fee").getValue()));
             kegInfo[i].setSavings(getDoubleFromDatabase(dataSnapshot.child("Saving").getValue()));
             kegInfo[i].setPurchaser((String)dataSnapshot.child("Purchaser").getValue());
+            kegInfo[i].setActive((boolean)dataSnapshot.child("active").getValue());
+            updateKegCardInfo(i);
         }
 
         @Override
@@ -179,6 +190,42 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
+    public void updateKegCardInfo(int i)
+    {
+        if(i == 0)
+        {
+            if(kegInfo[i] == null) {
+                keg1.setVisibility(View.INVISIBLE);
+                return;
+            }
+            if(kegInfo[i].isActive())
+                keg1.setVisibility(View.VISIBLE);
+            else
+                keg1.setVisibility(View.INVISIBLE);
+        }
+        else
+        {
+            if(kegInfo[i] == null) {
+                keg2.setVisibility(View.INVISIBLE);
+                return;
+            }
+            if(kegInfo[i].isActive())
+                keg2.setVisibility(View.VISIBLE);
+            else
+                keg2.setVisibility(View.INVISIBLE);
+        }
+        int nT = getResources().getIdentifier("name" + (i+1) + "Text", "id", getPackageName());
+        int sT = getResources().getIdentifier("style" + (i+1) + "Text", "id", getPackageName());
+        int bL = getResources().getIdentifier("beersLeft" + (i+1) + "Text", "id", getPackageName());
+        int pO = getResources().getIdentifier("perOunce" + (i+1) + "Text", "id", getPackageName());
+        int pB = getResources().getIdentifier("perBeer" + (i+1) + "Text", "id", getPackageName());
+        ((TextView) findViewById(nT)).setText(kegInfo[i].getName());
+        ((TextView) findViewById(sT)).setText(kegInfo[i].getStyle());
+        ((TextView) findViewById(bL)).setText(kegInfo[i].getRoundedBeersLeft());
+        ((TextView) findViewById(pO)).setText(kegInfo[i].getRoundedPricePerOunce());
+        ((TextView) findViewById(pB)).setText(kegInfo[i].getRoundedPricePerBeer());
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,6 +237,8 @@ public class MainActivity extends AppCompatActivity {
         userHashTable = new Hashtable<>();
         rfidHashTable = new Hashtable<>();
         balanceHashTable = new Hashtable<>();
+
+        mContext = getApplicationContext();
 
         // We create a new AuthSession so that we can use the Dropbox API.
         AndroidAuthSession session = buildSession();
@@ -219,13 +268,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        updateKegCardInfo(0);
+        updateKegCardInfo(1);
+
         ref = FirebaseDatabase.getInstance().getReference();
         ref.child("Users").addChildEventListener(userListener);
         ref.child("RFID").addChildEventListener(rfidListener);
         ref.child("Kegs").addChildEventListener(kegListeners);
 
-
     }
+
 
     @Override
     protected void onResume(){
@@ -255,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menuAdmin:
                 intent = new Intent(this, AdminTop.class);
-                startActivity(intent);
+                startActivityForResult(intent, ADMIN_REQUEST);
                 return true;
             case R.id.menuContactInfo:
                 intent = new Intent(this, ContactInfo.class);
@@ -283,5 +335,10 @@ public class MainActivity extends AppCompatActivity {
         AndroidAuthSession session = new AndroidAuthSession(appKeyPair);
         session.setOAuth2AccessToken(getString(R.string.APP_ACCESS_TOKEN));
         return session;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

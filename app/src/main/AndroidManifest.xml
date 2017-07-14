@@ -37,8 +37,10 @@
         <activity
             android:name=".BeerAdmin"
             android:parentActivityName=".AdminTop" />
-        <activity android:name=".EditKegActivity"
-            android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+            android:name=".EditKegActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".ImageSelectionActivity"></activity>
     </application>
 
 </manifest>

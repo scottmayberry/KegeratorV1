@@ -40,7 +40,7 @@ public class EditUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_user);
 
         key = getIntent().getStringExtra("KEY");
-        user = MainActivity.userHashTable.get(key);
+        user = Util.userHashTable.get(key);
 
         //setting spinner resources
         classification = (Spinner) findViewById(R.id.spinner);
@@ -129,7 +129,7 @@ public class EditUserActivity extends AppCompatActivity {
         adb.setTitle("Delete User?");
         adb.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                MainActivity.ref.child("Users").child(key).removeValue();
+                Util.ref.child("Users").child(key).removeValue();
                 finish();
             } });
         adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -177,15 +177,15 @@ public class EditUserActivity extends AppCompatActivity {
         User nU = new User(nameText.getText().toString(), rfid.getTag().toString(), venmoText.getText().toString(), classification.getSelectedItem().toString(), emailText.getText().toString());
         if(!nU.getUsername().equals(user.getUsername().toString()))
         {
-            for(String key : MainActivity.userHashTable.keySet())
+            for(String key : Util.userHashTable.keySet())
             {
-                if(!key.equals(this.key) && MainActivity.userHashTable.get(key).getUsername().equals(user.getUsername())) {
+                if(!key.equals(this.key) && Util.userHashTable.get(key).getUsername().equals(user.getUsername())) {
                     venmoError.setVisibility(View.VISIBLE);
                     return;
                 }//username exists
             }//check through the hashmap
         }//check for username equalling
-        MainActivity.ref.child("Users").child(key).setValue(nU);
+        Util.ref.child("Users").child(key).setValue(nU);
         finish();
 
     }
