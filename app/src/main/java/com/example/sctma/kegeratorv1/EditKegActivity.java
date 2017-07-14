@@ -107,6 +107,7 @@ public class EditKegActivity extends AppCompatActivity {
                 ref.child("Kegs").child("" + kegPos).child("active").setValue(false);
                 kegInfo[kegPos].setActive(false);
                 Toast.makeText(getApplicationContext(), "Keg Finished Off", Toast.LENGTH_SHORT).show();
+                //This Completes the Keg
                 finish();
             } });
         adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
